@@ -12,7 +12,7 @@ import { map } from 'rxjs/operators';
 export class TodoInputBoxComponent implements OnInit {
 
   @Input() selectedList: TodoModel;
-  public errorMsg = '';
+  public errorMsg = null;
 
   constructor(private  todoService: TodoService) {}
 
@@ -21,11 +21,12 @@ export class TodoInputBoxComponent implements OnInit {
 
   addItem(newItem: string) {
     // build object
-    let todoItem = new TodoItemModel();
+    const todoItem = new TodoItemModel();
     todoItem.description = newItem;
     this.todoService.addItem(this.selectedList.id, todoItem).subscribe(
       (v) => {
-        this.selectedList.items.push(JSON.parse(v as string) as TodoItemModel);
+        this.selectedList.items.push(v as TodoItemModel);
+        this.errorMsg = null;
       },
       (e) => this.errorMsg = 'Error while adding new item' + e.toString()
     );

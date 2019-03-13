@@ -3,6 +3,7 @@ import {TodoModel} from '../../todo-model';
 import {TodoService} from '../todo.service';
 import {TodoListComponent} from '../todo-list/todo-list.component';
 import {TodoItemModel} from '../../todo-item-model';
+import {TodoModule} from '../todo.module';
 
 @Component({
   selector: 'app-todo-select-list',

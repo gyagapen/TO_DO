@@ -30,12 +30,15 @@ class TodoManagement : IDataOperations {
 
     @Throws(Exception::class)
     override fun addItem(idList: Int, description: String) : TodoItem {
-
-        val todoList = fetchTodoListFromId(idList)
-        val item = TodoItem(idItem, description)
-        todoList.items.add(item)
-        idItem++
-        return item
+        if(description.trim() == "") {
+            throw TodoException(BLANK_INPUT)
+        } else {
+            val todoList = fetchTodoListFromId(idList)
+            val item = TodoItem(idItem, description)
+            todoList.items.add(item)
+            idItem++
+            return item
+         }
 
 
     }

@@ -9,13 +9,11 @@ import {TodoSelectListComponent} from './todo-select-list/todo-select-list.compo
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
   ],
   providers: [TodoService],
   declarations: [TodoListComponent, TodoInputBoxComponent, TodoSelectListComponent]
 })
 export class TodoModule {
-
-
 
 }
