@@ -42,11 +42,20 @@ describe('TodoSelectListComponent', () => {
       component.createTodoList('Work');
       expect(component.todoList.length).toBe(1);
     });
+    it('should accept list name with not special characters', () => {
+      const isValid = component.isListNameValid('Work');
+      expect(isValid).toBeTruthy();
+    });
     it('should populate error message due to blank name', () => {
       const todoList: TodoModel = <TodoModel> {};
-      spyOn(todoService, 'createTodoList').and.returnValue(of(todoList));
-      component.createTodoList('');
+      const isValid = component.isListNameValid('');
+      expect(isValid).toBeFalsy();
       expect(component.errorMsg).toBe('Name cannot be null');
+    });
+    it('should populate error message due to special characters', () => {
+      const isValid = component.isListNameValid('&sdgdgs!$');
+      expect(isValid).toBeFalsy();
+      expect(component.errorMsg).toBe('Name cannot contain any special character');
     });
     it('should populate error message due to service error', () => {
       spyOn(todoService, 'createTodoList').and.returnValue(of(ErrorEvent));
