@@ -5,8 +5,8 @@
   <button (click)="createTodoList(newItemName)">Create</button>
 </div>
 <br>
-<div *ngIf="errorMsg != null ">
-  <p>{{errorMsg}}</p>
+<div *ngIf="errorMsg !== '' ">
+  <p style="color:red">{{errorMsg}}</p>
 </div>
 
 <div *ngIf="todoList != null">

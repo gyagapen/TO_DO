@@ -7,7 +7,7 @@ import {of} from 'rxjs';
 import {FormsModule} from '@angular/forms';
 import {TodoListComponent} from '../todo-list/todo-list.component';
 import {TodoInputBoxComponent} from '../todo-input-box/todo-input-box.component';
-import {HttpClient, HttpHandler} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHandler} from '@angular/common/http';
 
 describe('TodoSelectListComponent', () => {
   let component: TodoSelectListComponent;
@@ -19,17 +19,18 @@ describe('TodoSelectListComponent', () => {
     TestBed.configureTestingModule({
       imports: [FormsModule],
       declarations: [ TodoSelectListComponent, TodoListComponent, TodoInputBoxComponent ],
-      providers: [HttpClient, HttpHandler]
+      providers: [TodoService, HttpClient, HttpHandler]
     })
     .compileComponents();
   }));
 
-  beforeEach(() => {
+ beforeEach(() => {
     fixture = TestBed.createComponent(TodoSelectListComponent);
     todoService = TestBed.get(TodoService);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    // fixture.detectChanges();
   });
+
 
   it('should create', () => {
     expect(component).toBeTruthy();
@@ -42,10 +43,24 @@ describe('TodoSelectListComponent', () => {
       component.createTodoList('Work');
       expect(component.todoList.length).toBe(1);
     });
-    it('should populate error message', () => {
+    it('should accept list name with not special characters', () => {
+      const isValid = component.isListNameValid('Work');
+      expect(isValid).toBeTruthy();
+    });
+    it('should populate error message due to blank name', () => {
+      const isValid = component.isListNameValid('');
+      expect(isValid).toBeFalsy();
+      expect(component.errorMsg).toBe('Name cannot be null');
+    });
+    it('should populate error message due to special characters', () => {
+      const isValid = component.isListNameValid('&sdgdgs!$');
+      expect(isValid).toBeFalsy();
+      expect(component.errorMsg).toBe('Name cannot contain any special character');
+    });
+    it('should populate error message due to service error', () => {
       spyOn(todoService, 'createTodoList').and.returnValue(of(ErrorEvent));
       component.createTodoList('Work');
-      expect(component.errorMsg).toBeDefined();
+      expect(component.errorMsg).not.toBe(null);
     });
   });
 
