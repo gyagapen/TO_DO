@@ -39,19 +39,16 @@ export class TodoSelectListComponent implements OnInit {
 
   createTodoList(newItemName: string) {
 
-    try {
       if (this.isListNameValid(newItemName)) {
         this.todoService.createTodoList(newItemName).subscribe(
           (v) => {
             this.todoList.push(v as TodoModel);
             this.errorMsg = '';
           },
-          (e) => this.errorMsg = 'Error while adding new item' + e.message
+          (e: ErrorEvent) => this.errorMsg = 'Error while adding new item' + e.message
         );
       }
-    } catch (e) {
-      this.errorMsg = 'Error while adding new item' + e.message.toString();
-    }
+
 
   }
 

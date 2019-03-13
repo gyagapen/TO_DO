@@ -7,7 +7,7 @@ import {of} from 'rxjs';
 import {FormsModule} from '@angular/forms';
 import {TodoListComponent} from '../todo-list/todo-list.component';
 import {TodoInputBoxComponent} from '../todo-input-box/todo-input-box.component';
-import {HttpClient, HttpHandler} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHandler} from '@angular/common/http';
 
 describe('TodoSelectListComponent', () => {
   let component: TodoSelectListComponent;
@@ -19,17 +19,18 @@ describe('TodoSelectListComponent', () => {
     TestBed.configureTestingModule({
       imports: [FormsModule],
       declarations: [ TodoSelectListComponent, TodoListComponent, TodoInputBoxComponent ],
-      providers: [HttpClient, HttpHandler]
+      providers: [TodoService, HttpClient, HttpHandler]
     })
     .compileComponents();
   }));
 
-  beforeEach(() => {
+ beforeEach(() => {
     fixture = TestBed.createComponent(TodoSelectListComponent);
     todoService = TestBed.get(TodoService);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    // fixture.detectChanges();
   });
+
 
   it('should create', () => {
     expect(component).toBeTruthy();
@@ -47,7 +48,6 @@ describe('TodoSelectListComponent', () => {
       expect(isValid).toBeTruthy();
     });
     it('should populate error message due to blank name', () => {
-      const todoList: TodoModel = <TodoModel> {};
       const isValid = component.isListNameValid('');
       expect(isValid).toBeFalsy();
       expect(component.errorMsg).toBe('Name cannot be null');
@@ -60,7 +60,7 @@ describe('TodoSelectListComponent', () => {
     it('should populate error message due to service error', () => {
       spyOn(todoService, 'createTodoList').and.returnValue(of(ErrorEvent));
       component.createTodoList('Work');
-      expect(component.errorMsg).toBeDefined();
+      expect(component.errorMsg).not.toBe(null);
     });
   });
 
