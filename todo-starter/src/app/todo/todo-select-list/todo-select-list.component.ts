@@ -20,7 +20,7 @@ export class TodoSelectListComponent implements OnInit {
   constructor(private todoService: TodoService) {
     this.todoList = new Array<TodoModel>();
     this.selectedList = -1;
-    this.errorMsg = null;
+    this.errorMsg = '';
   }
 
   ngOnInit() {
@@ -39,12 +39,17 @@ export class TodoSelectListComponent implements OnInit {
 
   createTodoList(newItemName: String) {
 
-    this.todoService.createTodoList(newItemName).subscribe(
-      (v) => {
-        this.todoList.push(v as TodoModel);
-      },
-      (e: ErrorEvent) => this.errorMsg = 'Error while adding new item' + e.message
-    );
+    if (newItemName.trim() !== '') {
+      this.todoService.createTodoList(newItemName).subscribe(
+        (v) => {
+          this.todoList.push(v as TodoModel);
+        },
+        (e: ErrorEvent) => this.errorMsg = 'Error while adding new item' + e.message
+      );
+    } else {
+      this.errorMsg = 'Name cannot be null';
+    }
+
   }
 
   onSelect(event) {

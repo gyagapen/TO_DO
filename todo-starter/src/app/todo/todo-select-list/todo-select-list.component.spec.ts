@@ -42,7 +42,13 @@ describe('TodoSelectListComponent', () => {
       component.createTodoList('Work');
       expect(component.todoList.length).toBe(1);
     });
-    it('should populate error message', () => {
+    it('should populate error message due to blank name', () => {
+      const todoList: TodoModel = <TodoModel> {};
+      spyOn(todoService, 'createTodoList').and.returnValue(of(todoList));
+      component.createTodoList('');
+      expect(component.errorMsg).toBe('Name cannot be null');
+    });
+    it('should populate error message due to service error', () => {
       spyOn(todoService, 'createTodoList').and.returnValue(of(ErrorEvent));
       component.createTodoList('Work');
       expect(component.errorMsg).toBeDefined();
